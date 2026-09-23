@@ -1,4 +1,4 @@
-part of 'therapist_list_cubit.dart';
+part of 'therapist_list_bloc.dart';
 
 sealed class TherapistListState extends Equatable {
   const TherapistListState();

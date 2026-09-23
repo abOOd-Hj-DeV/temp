@@ -73,7 +73,8 @@ class BookingRepository {
   ) async {
     if (await networkInfo.isConnected) {
       try {
-        final response = await bookingApiService.bookingAppointment(data.toJson());
+        final response =
+            await bookingApiService.bookingAppointment(data.toJson());
         return Right(response);
       } on ServerException catch (e) {
         return Left(ServerFailure(errorMessage: e.errModel.errorMessage));

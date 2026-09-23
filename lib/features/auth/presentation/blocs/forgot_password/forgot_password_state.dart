@@ -1,35 +1,34 @@
-import 'package:equatable/equatable.dart';
+part of 'forgot_password_bloc.dart';
 
-/// الفئة الأساسية لحالات نسيان كلمة المرور
-abstract class ForgotPasswordState extends Equatable {
+sealed class ForgotPasswordState extends Equatable {
   const ForgotPasswordState();
 
   @override
   List<Object?> get props => [];
 }
 
-/// الحالة الابتدائية
-class ForgotPasswordInitial extends ForgotPasswordState {}
+final class ForgotPasswordInitial extends ForgotPasswordState {
+  const ForgotPasswordInitial();
+}
 
-/// حالة التحميل (جاري إرسال الطلب)
-class ForgotPasswordLoading extends ForgotPasswordState {}
+final class ForgotPasswordLoading extends ForgotPasswordState {
+  const ForgotPasswordLoading();
+}
 
-/// حالة النجاح (تم إرسال رابط/رمز الاستعادة)
-class ForgotPasswordSuccess extends ForgotPasswordState {
+final class ForgotPasswordSuccess extends ForgotPasswordState {
   final String message;
+  final String whatsappNumber;
+  const ForgotPasswordSuccess(
+      {required this.message, required this.whatsappNumber});
 
-  const ForgotPasswordSuccess({required this.message});
+  @override
+  List<Object?> get props => [message, whatsappNumber];
+}
+
+final class ForgotPasswordFailure extends ForgotPasswordState {
+  final String message;
+  const ForgotPasswordFailure(this.message);
 
   @override
   List<Object?> get props => [message];
-}
-
-/// حالة الفشل (حدث خطأ أثناء الطلب)
-class ForgotPasswordFailure extends ForgotPasswordState {
-  final String error;
-
-  const ForgotPasswordFailure({required this.error});
-
-  @override
-  List<Object?> get props => [error];
 }

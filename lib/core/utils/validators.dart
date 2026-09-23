@@ -46,6 +46,13 @@ class Validators {
     return null;
   }
 
+  static String? validateAge(String? value) {
+    if (value == null || value.isEmpty) return AppStrings.ageRequired;
+    final age = int.tryParse(value);
+    if (age == null || age < 18 || age > 120) return AppStrings.ageInvalid;
+    return null;
+  }
+
   static String? validateConfirmPassword(String? value, String password) {
     if (value == null || value.isEmpty) {
       return AppStrings.confirmPasswordRequired;

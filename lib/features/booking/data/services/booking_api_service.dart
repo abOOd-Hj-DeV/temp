@@ -1,5 +1,6 @@
 import 'package:etmaen/core/api/api_consumer.dart';
 
+/// لا يوفر الباك‑إند حالياً endpoints للحجز؛ بيانات محلية مؤقتة.
 class BookingApiService {
   ApiConsumer api;
 

@@ -1,35 +1,33 @@
-import 'package:equatable/equatable.dart';
+part of 'sign_up_bloc.dart';
 
-/// الفئة الأساسية لحالات إنشاء الحساب
-abstract class SignUpState extends Equatable {
+sealed class SignUpState extends Equatable {
   const SignUpState();
 
   @override
   List<Object?> get props => [];
 }
 
-/// الحالة الابتدائية
-class SignUpInitial extends SignUpState {}
+final class SignUpInitial extends SignUpState {
+  const SignUpInitial();
+}
 
-/// حالة التحميل (جاري إنشاء الحساب)
-class SignUpLoading extends SignUpState {}
+final class SignUpLoading extends SignUpState {
+  const SignUpLoading();
+}
 
-/// حالة النجاح (تم إنشاء الحساب بنجاح)
-class SignUpSuccess extends SignUpState {
+final class SignUpSuccess extends SignUpState {
   final String message;
+  final String whatsappNumber;
+  const SignUpSuccess({required this.message, required this.whatsappNumber});
 
-  const SignUpSuccess({required this.message});
+  @override
+  List<Object?> get props => [message, whatsappNumber];
+}
+
+final class SignUpFailure extends SignUpState {
+  final String message;
+  const SignUpFailure(this.message);
 
   @override
   List<Object?> get props => [message];
-}
-
-/// حالة الفشل (حدث خطأ أثناء الإنشاء)
-class SignUpFailure extends SignUpState {
-  final String error;
-
-  const SignUpFailure({required this.error});
-
-  @override
-  List<Object?> get props => [error];
 }

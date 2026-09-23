@@ -1,35 +1,32 @@
-import 'package:equatable/equatable.dart';
+part of 'sign_in_bloc.dart';
 
-/// الفئة الأساسية لحالات تسجيل الدخول
-abstract class SignInState extends Equatable {
+sealed class SignInState extends Equatable {
   const SignInState();
 
   @override
   List<Object?> get props => [];
 }
 
-/// الحالة الابتدائية
-class SignInInitial extends SignInState {}
+final class SignInInitial extends SignInState {
+  const SignInInitial();
+}
 
-/// حالة التحميل (جاري تسجيل الدخول)
-class SignInLoading extends SignInState {}
+final class SignInLoading extends SignInState {
+  const SignInLoading();
+}
 
-/// حالة النجاح (تم تسجيل الدخول بنجاح)
-class SignInSuccess extends SignInState {
+final class SignInSuccess extends SignInState {
+  final AuthSessionModel session;
+  const SignInSuccess(this.session);
+
+  @override
+  List<Object?> get props => [session];
+}
+
+final class SignInFailure extends SignInState {
   final String message;
-
-  const SignInSuccess({required this.message});
+  const SignInFailure(this.message);
 
   @override
   List<Object?> get props => [message];
-}
-
-/// حالة الفشل (حدث خطأ أثناء تسجيل الدخول)
-class SignInFailure extends SignInState {
-  final String error;
-
-  const SignInFailure({required this.error});
-
-  @override
-  List<Object?> get props => [error];
 }

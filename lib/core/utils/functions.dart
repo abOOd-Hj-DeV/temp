@@ -1,7 +1,3 @@
-String getAvatarUrl(String avatar, String id) {
-  return 'http://127.0.0.1:8090/api/files/therapists/$id/$avatar';
-}
-
 (String, String) getArabicMonthAndDay(String dateStr) {
   // Parse the input date string into a DateTime object
   DateTime dateTime = DateTime.parse(dateStr);

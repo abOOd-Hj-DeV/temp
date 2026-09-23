@@ -43,7 +43,7 @@ class AssessmentProgressIndicator extends StatelessWidget {
           child: LinearProgressIndicator(
             value: progress,
             minHeight: 8.h,
-            backgroundColor: AppColors.primary.withOpacity(0.15),
+            backgroundColor: AppColors.primary.withValues(alpha: 0.15),
             valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
           ),
         ),

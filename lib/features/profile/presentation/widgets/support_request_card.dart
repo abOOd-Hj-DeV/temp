@@ -99,7 +99,9 @@ class _SupportRequestCardState extends State<SupportRequestCard> {
                 child: Row(
                   children: [
                     Text(
-                      _isExpanded ? AppStrings.hideDetails : AppStrings.viewDetailsLabel,
+                      _isExpanded
+                          ? AppStrings.hideDetails
+                          : AppStrings.viewDetailsLabel,
                       style: AppFonts.tajawalRegular14.copyWith(
                         color: AppColors.black80,
                       ),

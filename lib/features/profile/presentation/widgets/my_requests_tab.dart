@@ -17,7 +17,7 @@ class MyRequestsTab extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SupportRequestTitle(
+            const SupportRequestTitle(
               icon: Iconsax.support,
               title: AppStrings.supportRequestTitle,
             ),

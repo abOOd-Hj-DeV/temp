@@ -43,7 +43,7 @@
 ### لفريق التطوير
 - 🏗️ ** Clean Architecture ** — فصل واضح بين الطبقات
 - 🧩 **Modular Routing** — إدارة متقدمة للمسارات عبر flutter_modular
-- 📦 **State Management** — إدارة حالة باستخدام BLoC/Cubit
+- 📦 **State Management** — إدارة حالة باستخدام BLoC (Event/State)
 - 🔌 **Dependency Injection** — حقن التبعيات عبر GetIt
 
 ---
@@ -61,7 +61,7 @@
 | **التصميم** | flutter_screenutil, google_fonts, iconsax |
 | **المكونات** | pinput (OTP), step_progress, confetti, dotted_border |
 | **التكامل** | flutter_svg, flutter_native_splash |
-| **قواعد البيانات** | PocketBase (REST API) |
+| **قواعد البيانات** | Laravel REST API (`/api/v1`) — مستودع temp2 |
 
 ---
 
@@ -113,31 +113,40 @@ lib/
 - Android Studio / VS Code
 - Emulator أو جهاز فيزيائي
 
-### التثبيت
+### التثبيت والتشغيل
 
 ```bash
-# 1. استنساخ المستودع
-git clone https://github.com/username/heal_bridge-frontend.git
-
-# 2. الانتقال إلى مجلد المشروع
-cd heal_bridge-frontend
-
-# 3. تثبيت التبعيات
+git clone https://github.com/abOOd-Hj-DeV/temp.git
+cd temp
 flutter pub get
 
-# 4. تشغيل التطبيق
-flutter run
+# عنوان الباك‑إند (Laravel) يُمرَّر وقت البناء — الافتراضي http://127.0.0.1:8000/api/v1/
+flutter run --dart-define=API_BASE_URL=https://api.example.com/api/v1/
 ```
 
-### بناء التطبيق
+### الفحص والبناء
 
 ```bash
-# بناء APK (Android)
-flutter build apk --release
-
-# بناء IPA (iOS)
-flutter build ios --release
+flutter analyze
+flutter test
+# --no-tree-shake-icons مطلوب بسبب خط حزمة iconsax (خطأ codepoint 0 في مقلّص الأيقونات)
+flutter build web --no-tree-shake-icons --dart-define=API_BASE_URL=https://api.example.com/api/v1/
+flutter build apk --release --dart-define=API_BASE_URL=https://api.example.com/api/v1/
 ```
+
+### ربط الباك‑إند
+
+الطبقة المنطقية مبنية على عقود Laravel في مستودع `temp2` (بادئة `/api/v1`, مصادقة Bearer, تسجيل الدخول برقم الواتساب, OTP من 6 أرقام):
+
+| الميزة | Endpoints | الحالة |
+|---|---|---|
+| المصادقة | `auth/register` `auth/login` `auth/otp/verify` `auth/otp/resend` `auth/forgot-password` `auth/reset-password` `auth/user` `auth/logout` | مربوطة (Bloc) |
+| المريض | `patients/profile` (GET/PUT) `patients/dashboard` `patients/progress` `patients/appointments` `patients/programs` `patients/account` (DELETE) `patients/export-data` | مربوطة (Bloc) |
+| التقييم PHQ-9 / GAD-7 | `patients/assessment` (POST) `patients/assessment/history` | مربوطة؛ نص الأسئلة محلي لأن الباك‑إند لا يوفّره |
+| المعالجون / الحجز | — | **لا يوجد endpoint** في الباك‑إند؛ بيانات محلية مؤقتة في `*_api_service.dart` |
+| الباقات / الدفع / الطوارئ / FAQ | — | **لا يوجد endpoint**؛ واجهات فقط بمحتوى محلي |
+
+التوكن يُحفظ في `flutter_secure_storage` ويُضاف تلقائياً عبر `AuthInterceptor`، ولا تُطبع أي بيانات حساسة في اللوج.
 
 ---
 
@@ -148,7 +157,7 @@ flutter build ios --release
 ```
 ┌─────────────────────────────────────────┐
 │           Presentation Layer            │
-│  (Pages, Widgets, BLoCs / Cubits)       │
+│  (Pages, Widgets, BLoCs)       │
 ├─────────────────────────────────────────┤
 │             Domain Layer                │
 │  (Entities, Use Cases)                  │
@@ -164,13 +173,13 @@ flutter build ios --release
 ```
 UI (Page/Widget)
     ↓ Event
-BLoC / Cubit
+BLoC
     ↓ Method Call
 Repository
     ↓ API Call
 ApiService (Dio)
     ↓ HTTP Request
-PocketBase Server
+Laravel API Server
 ```
 
 ---
@@ -194,23 +203,19 @@ PocketBase Server
 ## 🗺️ خريطة المسارات
 
 ```
-/ (Splash)
-├── /onboarding → /start_video → /assessment_intro_screen
-│                                → /assessment_question_screen
-│                                → /available_options
-│                                → /doctor_profile_details
-│                                → /booking_page
+/ (Splash)  ← يفحص التوكن: مسجّل → /home ، غير مسجّل → /onboarding أو /welcome
+├── /onboarding → /welcome
 ├── /welcome
 │   ├── /sign_in → /home
-│   │   └── /forgot_password → /enter_otp → /home
-│   └── /create_account → /enter_otp → /home
+│   │   └── /forgot_password → /enter_otp → /create_new_password → /sign_in
+│   └── /create_account → /enter_otp → /complete_profile → /home
 └── /home (CorePage)
-    ├── Tab: الرئيسية
+    ├── Tab: الرئيسية  → /assessment_intro_screen → /assessment_question_screen → /assessment_result_screen
+    │                  → /assessment_history ، /programs ، /emergency
     ├── Tab: مواعيدي
-    ├── Tab: مدفوعات
-    └── Tab: الحساب
-        ├── /edit_personal_info
-        └── /help_and_support
+    ├── Tab: مدفوعات  → /packages → /payment_summary → /thank_you
+    └── Tab: الحساب   → /edit_personal_info ، /help_and_support ، /faq ، /privacy_policy ، /terms_and_conditions
+/available_options → /doctor_profile_details → /booking_page   (بيانات محلية)
 ```
 
 ---

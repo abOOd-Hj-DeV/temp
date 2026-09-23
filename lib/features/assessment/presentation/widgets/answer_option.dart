@@ -7,11 +7,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class AnswerOption extends StatelessWidget {
   final String text;
   final VoidCallback onTap;
+  final bool isSelected;
 
   const AnswerOption({
     super.key,
     required this.text,
     required this.onTap,
+    this.isSelected = false,
   });
 
   @override
@@ -29,10 +31,12 @@ class AnswerOption extends StatelessWidget {
           vertical: 16.h,
         ),
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: isSelected
+              ? AppColors.primary.withValues(alpha: 0.08)
+              : AppColors.white,
           borderRadius: BorderRadius.circular(AppSizes.mdRadius),
           border: Border.all(
-            color: const Color(0xFFE5E7EB),
+            color: isSelected ? AppColors.primary : const Color(0xFFE5E7EB),
             width: 1.6,
           ),
         ),

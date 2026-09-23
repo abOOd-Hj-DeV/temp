@@ -18,7 +18,7 @@ class QuestionCard extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: AppColors.primary.withOpacity(0.05),
+        color: AppColors.primary.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(AppSizes.lgRadius),
       ),
       child: Text(

@@ -33,8 +33,8 @@ class DoctorAppointments extends StatelessWidget {
               (index) {
                 final day = days[index];
                 return Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: AppSizes.smPadding),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: AppSizes.smPadding),
                   decoration: const BoxDecoration(
                     border: Border(
                       right: BorderSide(color: AppColors.primary, width: 2),

@@ -1,38 +1,75 @@
-import 'package:equatable/equatable.dart';
-import 'package:etmaen/features/assessment/data/models/assessment_templates.dart';
+part of 'assessment_bloc.dart';
 
-abstract class AssessmentState extends Equatable {
+sealed class AssessmentState extends Equatable {
   const AssessmentState();
 
   @override
   List<Object?> get props => [];
 }
 
-class AssessmentInitial extends AssessmentState {}
-
-class AssessmentLoading extends AssessmentState {}
-
-class AssessmentsLoaded extends AssessmentState {
-  final List<AssessmentTemplateModel> assessment;
-
-  const AssessmentsLoaded({required this.assessment});
-
-  @override
-  List<Object?> get props => [assessment];
+final class AssessmentInitial extends AssessmentState {
+  const AssessmentInitial();
 }
 
-class AssessmentFailure extends AssessmentState {
-  final String error;
+final class AssessmentInProgress extends AssessmentState {
+  final AssessmentType type;
+  final List<AssessmentQuestionModel> questions;
+  final Map<String, int> answers;
+  final int currentIndex;
 
-  const AssessmentFailure({required this.error});
+  const AssessmentInProgress({
+    required this.type,
+    required this.questions,
+    required this.answers,
+    required this.currentIndex,
+  });
+
+  AssessmentQuestionModel get currentQuestion => questions[currentIndex];
+
+  int? get currentAnswer => answers[currentQuestion.key];
+
+  AssessmentInProgress copyWith({
+    Map<String, int>? answers,
+    int? currentIndex,
+  }) =>
+      AssessmentInProgress(
+        type: type,
+        questions: questions,
+        answers: answers ?? this.answers,
+        currentIndex: currentIndex ?? this.currentIndex,
+      );
 
   @override
-  List<Object?> get props => [error];
+  List<Object?> get props => [type, questions, answers, currentIndex];
 }
 
-class AssessmentSubmitted extends AssessmentState {
-  const AssessmentSubmitted();
+final class AssessmentSubmitting extends AssessmentState {
+  final AssessmentInProgress progress;
+  const AssessmentSubmitting(this.progress);
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [progress];
+}
+
+final class AssessmentCompleted extends AssessmentState {
+  final AssessmentResultModel result;
+  const AssessmentCompleted(this.result);
+
+  @override
+  List<Object?> get props => [result];
+}
+
+final class AssessmentFailure extends AssessmentState {
+  final String message;
+  final AssessmentInProgress progress;
+  final bool profileRequired;
+
+  const AssessmentFailure({
+    required this.message,
+    required this.progress,
+    this.profileRequired = false,
+  });
+
+  @override
+  List<Object?> get props => [message, progress, profileRequired];
 }

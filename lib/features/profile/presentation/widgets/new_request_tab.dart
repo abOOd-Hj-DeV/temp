@@ -20,13 +20,13 @@ class NewRequestTab extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SupportRequestTitle(
+          const SupportRequestTitle(
             icon: Iconsax.info_circle,
             title: AppStrings.commonQuestions,
           ),
-          CustomCard(
-            margin: const EdgeInsets.only(bottom: AppSizes.lgPadding),
-            child: const Column(
+          const CustomCard(
+            margin: EdgeInsets.only(bottom: AppSizes.lgPadding),
+            child: Column(
               children: [
                 FAQTile(
                   question: "كيف يمكنني حجز جلسة إضافية؟",
@@ -55,7 +55,7 @@ class NewRequestTab extends StatelessWidget {
               ],
             ),
           ),
-          SupportRequestTitle(
+          const SupportRequestTitle(
             icon: Iconsax.message,
             title: AppStrings.submitSupportRequest,
           ),

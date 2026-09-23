@@ -56,7 +56,7 @@ class TherapistLisDoctorCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  doctorModel.title ,
+                  doctorModel.title,
                   style: AppFonts.tajawalMedium14.copyWith(
                     color: AppColors.textGray,
                   ),

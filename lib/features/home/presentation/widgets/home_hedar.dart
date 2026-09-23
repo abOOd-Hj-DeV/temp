@@ -1,8 +1,9 @@
-import 'package:etmaen/core/constants/app_pages_name.dart';
-import 'package:etmaen/core/constants/app_sizes.dart';
 import 'package:etmaen/core/constants/app_colors.dart';
 import 'package:etmaen/core/constants/app_fonts.dart';
+import 'package:etmaen/core/constants/app_pages_name.dart';
+import 'package:etmaen/core/constants/app_sizes.dart';
 import 'package:etmaen/core/constants/app_strings.dart';
+import 'package:etmaen/features/patient/data/models/dashboard_model.dart';
 import 'package:etmaen/shared/widget/card.dart';
 import 'package:etmaen/shared/widget/custom_button.dart' show CustomButton;
 import 'package:flutter/material.dart';
@@ -11,61 +12,60 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
 class HomeSliverAppBar extends StatelessWidget {
-  const HomeSliverAppBar({
-    super.key,
-  });
+  final DashboardModel? dashboard;
+
+  const HomeSliverAppBar({super.key, this.dashboard});
 
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-        backgroundColor: AppColors.primary,
-        automaticallyImplyLeading: false,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(AppSizes.mdRadius),
-            bottomRight: Radius.circular(AppSizes.mdRadius),
-          ),
+      backgroundColor: AppColors.primary,
+      automaticallyImplyLeading: false,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(AppSizes.mdRadius),
+          bottomRight: Radius.circular(AppSizes.mdRadius),
         ),
-        pinned: true,
-        expandedHeight: 300.h,
-        actionsPadding:
-            const EdgeInsets.symmetric(horizontal: AppSizes.mdPadding),
-        actions: [
-          Icon(
-            Iconsax.menu_1,
-            color: AppColors.white,
-            size: 24.sp,
-          ),
-          const Spacer(),
-          Icon(
-            Iconsax.notification,
-            color: AppColors.white,
-            size: 24.sp,
-          ),
-        ],
-        flexibleSpace: const FlexibleSpaceBar(
-          background: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              HomeDoctorItem(
-                imageUrl:
-                    "https://static.boredpanda.com/blog/wp-content/uploads/2017/03/mr-bean-rowan-atkinson-photoshop-58d8c45e6882a__880.jpg",
-                name: "د. سارة أحمد",
-              ),
-              SubscriptionCard(),
-            ],
-          ),
-        ));
+      ),
+      pinned: true,
+      expandedHeight: 300.h,
+      actionsPadding:
+          const EdgeInsets.symmetric(horizontal: AppSizes.mdPadding),
+      actions: [
+        IconButton(
+          onPressed: () => Modular.to.pushNamed(AppRouteName.emergency),
+          icon: Icon(Iconsax.danger, color: AppColors.white, size: 24.sp),
+        ),
+        const Spacer(),
+        Text(
+          dashboard == null
+              ? AppStrings.appName
+              : '${AppStrings.welcomeBack} ${dashboard!.fullName}',
+          style: AppFonts.tajawalBold16.copyWith(color: AppColors.white),
+        ),
+      ],
+      flexibleSpace: FlexibleSpaceBar(
+        background: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            HomeDoctorItem(hasTherapist: dashboard?.nextSession != null),
+            SubscriptionCard(dashboard: dashboard),
+          ],
+        ),
+      ),
+    );
   }
 }
 
 class SubscriptionCard extends StatelessWidget {
-  const SubscriptionCard({
-    super.key,
-  });
+  final DashboardModel? dashboard;
+
+  const SubscriptionCard({super.key, this.dashboard});
 
   @override
   Widget build(BuildContext context) {
+    final latest = dashboard?.latestAssessment;
+    final next = dashboard?.nextSession;
     return CustomCard(
       margin: EdgeInsets.all(AppSizes.lgRadius),
       borderRadius: BorderRadius.circular(AppSizes.xlRadius),
@@ -74,42 +74,44 @@ class SubscriptionCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Text(AppStrings.subscription,
+              Text(AppStrings.nextSession,
                   style: AppFonts.tajawalRegular14
                       .copyWith(color: AppColors.textGray)),
               const Spacer(),
-              Text(AppStrings.remaining,
-                  style: AppFonts.tajawalRegular12
-                      .copyWith(color: AppColors.textGray)),
-              Text("42 ${AppStrings.days}",
-                  style: AppFonts.tajawalBold16
-                      .copyWith(color: AppColors.primary)),
+              Text(
+                next == null
+                    ? AppStrings.noUpcomingSession
+                    : '${next.sessionDate} • ${next.sessionTime}',
+                style:
+                    AppFonts.tajawalBold16.copyWith(color: AppColors.primary),
+              ),
             ],
           ),
-          Text(AppStrings.subscriptionPackageLabel,
-              style: AppFonts.tajawalBold18),
-          SizedBox(
-            height: 10.h,
+          SizedBox(height: 10.h),
+          Text(
+            latest == null
+                ? AppStrings.noAssessmentYet
+                : '${AppStrings.latestAssessment}: ${latest.type.toUpperCase()} — ${latest.score}',
+            style: AppFonts.tajawalBold18,
           ),
+          if (latest != null && latest.interpretation.isNotEmpty) ...[
+            SizedBox(height: 6.h),
+            Text(latest.interpretation,
+                style: AppFonts.tajawalRegular12
+                    .copyWith(color: AppColors.textGray)),
+          ],
+          SizedBox(height: 10.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(AppStrings.programProgress,
+              Text(AppStrings.complianceLevel,
                   style: AppFonts.tajawalRegular12
                       .copyWith(color: AppColors.textGray)),
-              Text(AppStrings.programProgressFormat,
+              Text(dashboard?.complianceLevel ?? '-',
                   style: AppFonts.tajawalRegular12
                       .copyWith(color: AppColors.textGray)),
             ],
           ),
-          SizedBox(height: AppSizes.smPadding.h),
-          LinearProgressIndicator(
-            minHeight: 8.h,
-            color: AppColors.primary,
-            value: 0.35,
-            backgroundColor: AppColors.mintGreen,
-            borderRadius: BorderRadius.circular(AppSizes.pillRadius),
-          )
         ],
       ),
     );
@@ -117,64 +119,47 @@ class SubscriptionCard extends StatelessWidget {
 }
 
 class HomeDoctorItem extends StatelessWidget {
-  const HomeDoctorItem({
-    super.key,
-    this.imageUrl,
-    required this.name,
-  });
+  final bool hasTherapist;
 
-  final String? imageUrl;
-  final String name;
+  const HomeDoctorItem({super.key, required this.hasTherapist});
 
   @override
   Widget build(BuildContext context) {
     return CustomCard(
       margin: const EdgeInsets.symmetric(horizontal: AppSizes.lgPadding),
-      backgroundColor: Colors.white.withOpacity(0.3),
+      backgroundColor: Colors.white.withValues(alpha: 0.3),
       borderRadius: BorderRadius.circular(AppSizes.mdRadius),
       child: Row(
         children: [
           CircleAvatar(
             radius: 25.h,
             backgroundColor: AppColors.greyF6,
-            backgroundImage: imageUrl != null ? NetworkImage(imageUrl!) : null,
-            child: imageUrl == null
-                ? Icon(
-                    Iconsax.user,
-                    color: AppColors.primary,
-                    size: 30.sp,
-                  )
-                : null,
+            child: Icon(Iconsax.user, color: AppColors.primary, size: 30.sp),
           ),
-          SizedBox(
-            width: 10.w,
-          ),
+          SizedBox(width: 10.w),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text(AppStrings.yourTherapist, style: AppFonts.tajawalRegular14),
               Text(
-                AppStrings.yourTherapist,
-                style: AppFonts.tajawalRegular14,
-              ),
-              Text(
-                "د. سارة أحمد",
+                hasTherapist
+                    ? AppStrings.therapistAssigned
+                    : AppStrings.noTherapistYet,
                 style: AppFonts.tajawalRegular14,
               ),
             ],
           ),
           const Spacer(),
           CustomButton(
-              text: AppStrings.message,
-              onPressed: () {
-                Modular.to.pushNamed(AppRouteName.doctorProfileDetails,
-                    arguments: 'y1k1f76qi8xzqob');
-              },
-              color: AppColors.white,
-              textColor: AppColors.primary),
+            text: AppStrings.browseTherapists,
+            onPressed: () =>
+                Modular.to.pushNamed(AppRouteName.availableOptions),
+            color: AppColors.white,
+            textColor: AppColors.primary,
+          ),
         ],
       ),
     );
   }
 }
- 

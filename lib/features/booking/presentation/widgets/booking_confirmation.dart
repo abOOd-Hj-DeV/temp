@@ -4,8 +4,7 @@ import 'package:etmaen/core/constants/app_fonts.dart';
 import 'package:etmaen/core/constants/app_sizes.dart';
 import 'package:etmaen/core/constants/app_strings.dart';
 import 'package:etmaen/core/utils/functions.dart';
-import 'package:etmaen/features/booking/presentation/block/booking_cubit.dart';
-import 'package:etmaen/features/booking/presentation/block/booking_state.dart';
+import 'package:etmaen/features/booking/presentation/blocs/booking_bloc.dart';
 import 'package:etmaen/features/therapist/data/models/therapist_model.dart';
 import 'package:etmaen/shared/widget/card.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +17,7 @@ class BookingConfirmation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BookingCubit, BookingState>(
+    return BlocBuilder<BookingBloc, BookingState>(
       builder: (context, state) {
         if (state.selectedDate == null ||
             state.selectedTime == null ||

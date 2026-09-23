@@ -9,14 +9,14 @@ class AlertService {
     required BuildContext context,
     required String message,
     required AlertType type,
-    Duration duration = const Duration(milliseconds: 1),
+    Duration duration = const Duration(seconds: 3),
   }) {
     AlertInfo.show(
       position: MessagePosition.bottom,
       context: context,
       text: message,
       typeInfo: _getAlertInfoType(type),
-      duration: duration.inMilliseconds,
+      duration: duration.inSeconds,
     );
   }
 

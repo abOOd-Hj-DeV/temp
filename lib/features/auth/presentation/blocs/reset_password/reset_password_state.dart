@@ -1,35 +1,32 @@
-import 'package:equatable/equatable.dart';
+part of 'reset_password_bloc.dart';
 
-/// الفئة الأساسية شحالات تعيين كلمة المرور
-abstract class ResetPasswordState extends Equatable {
+sealed class ResetPasswordState extends Equatable {
   const ResetPasswordState();
 
   @override
   List<Object?> get props => [];
 }
 
-/// الحالة الابتدائية
-class ResetPasswordInitial extends ResetPasswordState {}
+final class ResetPasswordInitial extends ResetPasswordState {
+  const ResetPasswordInitial();
+}
 
-/// حالة التحميل (جاري تحديث كلمة المرور)
-class ResetPasswordLoading extends ResetPasswordState {}
+final class ResetPasswordLoading extends ResetPasswordState {
+  const ResetPasswordLoading();
+}
 
-/// حالة النجاح (تم تغيير كلمة المرور بنجاح)
-class ResetPasswordSuccess extends ResetPasswordState {
+final class ResetPasswordSuccess extends ResetPasswordState {
   final String message;
-
-  const ResetPasswordSuccess({required this.message});
+  const ResetPasswordSuccess(this.message);
 
   @override
   List<Object?> get props => [message];
 }
 
-/// حالة الفشل (حدث خطأ أثناء التغيير)
-class ResetPasswordFailure extends ResetPasswordState {
-  final String error;
-
-  const ResetPasswordFailure({required this.error});
+final class ResetPasswordFailure extends ResetPasswordState {
+  final String message;
+  const ResetPasswordFailure(this.message);
 
   @override
-  List<Object?> get props => [error];
+  List<Object?> get props => [message];
 }

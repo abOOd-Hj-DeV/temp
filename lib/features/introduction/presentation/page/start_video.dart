@@ -39,7 +39,7 @@ class StartVideo extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                    SizedBox(
+                  SizedBox(
                     width: double.infinity,
                     child: CustomButton(
                       text: AppStrings.playVideo,

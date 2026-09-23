@@ -1,5 +1,3 @@
-import 'package:etmaen/core/utils/functions.dart';
-
 /// PocketBase therapists koleksiyonu modeli
 class TherapistModel {
   final String id;
@@ -71,9 +69,9 @@ class TherapistModel {
       isAvailable: json['is_available'] ?? false,
       isEmergency: json['is_emergency'] ?? false,
       experienceYears: json['years_of_experience'] ?? 0,
-      imageUrl: json['avatar'] == ''
-          ? null
-          : getAvatarUrl(json['avatar'], json['id']),
+      imageUrl: (json['avatar'] as String?)?.isNotEmpty == true
+          ? json['avatar']
+          : null,
       created: json['created'] ?? '',
       updated: json['updated'] ?? '',
     );

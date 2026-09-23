@@ -1,29 +1,38 @@
 import 'package:dio/dio.dart';
 import 'package:etmaen/core/api/api_consumer.dart';
 import 'package:etmaen/core/api/api_interceptors.dart';
-import 'package:etmaen/core/api/end_ponits.dart';
+import 'package:etmaen/core/api/end_points.dart';
 import 'package:etmaen/core/error/exceptions.dart';
+import 'package:etmaen/core/storage/token_storage.dart';
+import 'package:flutter/foundation.dart';
 
-/// تنفيذ استهلاك الـ API باستخدام مكتبة Dio
+/// تنفيذ استهلاك الـ API باستخدام Dio
 class DioConsumer extends ApiConsumer {
   final Dio dio;
 
-  DioConsumer({required this.dio}) {
-    // إعداد الرابط الأساسي وإضافة المعترضات (Interceptors)
-    dio.options.baseUrl = EndPoint.baseUrl;
-    dio.interceptors.add(ApiInterceptor());
-    dio.interceptors.add(LogInterceptor(
-      request: true,
-      requestHeader: true,
-      requestBody: true,
-      responseHeader: true,
-      responseBody: true,
-      error: true,
-    ));
+  DioConsumer({required this.dio, required TokenStorage tokenStorage}) {
+    dio.options
+      ..baseUrl = EndPoint.baseUrl
+      ..connectTimeout = const Duration(seconds: 20)
+      ..receiveTimeout = const Duration(seconds: 20)
+      ..headers = {
+        Headers.acceptHeader: Headers.jsonContentType,
+        Headers.contentTypeHeader: Headers.jsonContentType,
+      };
+    dio.interceptors.add(AuthInterceptor(tokenStorage));
+    if (kDebugMode) {
+      dio.interceptors.add(LogInterceptor(
+        request: true,
+        requestHeader: false,
+        requestBody: false,
+        responseHeader: false,
+        responseBody: false,
+        error: true,
+      ));
+    }
   }
 
   @override
-  // تنفيذ عملية الحذف (DELETE) مع معالجة الأخطاء
   Future delete(
     String path, {
     dynamic data,
@@ -43,7 +52,6 @@ class DioConsumer extends ApiConsumer {
   }
 
   @override
-  // تنفيذ عملية الجلب (GET)
   Future get(String path,
       {Object? data, Map<String, dynamic>? queryParameters}) async {
     try {
@@ -59,7 +67,21 @@ class DioConsumer extends ApiConsumer {
   }
 
   @override
-  // تنفيذ عملية التحديث الجزئي (PATCH)
+  Future put(String path,
+      {Object? data, Map<String, dynamic>? queryParameters}) async {
+    try {
+      final response = await dio.put(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+      );
+      return response.data;
+    } on DioException catch (e) {
+      handleDioExceptions(e);
+    }
+  }
+
+  @override
   Future patch(
     String path, {
     dynamic data,
@@ -79,7 +101,6 @@ class DioConsumer extends ApiConsumer {
   }
 
   @override
-  // تنفيذ عملية الإرسال (POST)
   Future post(
     String path, {
     dynamic data,

@@ -4,7 +4,6 @@ import 'package:etmaen/features/introduction/data/model/onboarding_model.dart';
 
 /// قائمة البيانات onboarding
 
-
 class OnboardingDataList {
   static List<OnboardingModel> onboardingDataList = [
     OnboardingModel(

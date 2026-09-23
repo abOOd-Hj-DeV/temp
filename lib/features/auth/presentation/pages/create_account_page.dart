@@ -1,17 +1,19 @@
-import 'package:etmaen/core/constants/app_sizes.dart';
-import 'package:etmaen/core/utils/alert_dialog_helper.dart';
-import 'package:etmaen/core/utils/validators.dart';
-import 'package:etmaen/features/auth/presentation/blocs/sign_up/sign_up_cubit.dart';
-import 'package:etmaen/features/auth/presentation/blocs/sign_up/sign_up_state.dart';
-import 'package:etmaen/features/auth/presentation/widget/auth_text_field.dart';
-import 'package:etmaen/shared/widget/auth_header.dart';
-import 'package:flutter/material.dart';
 import 'package:etmaen/core/constants/app_colors.dart';
 import 'package:etmaen/core/constants/app_fonts.dart';
+import 'package:etmaen/core/constants/app_pages_name.dart';
+import 'package:etmaen/core/constants/app_sizes.dart';
 import 'package:etmaen/core/constants/app_strings.dart';
+import 'package:etmaen/core/utils/alert_dialog_helper.dart';
+import 'package:etmaen/core/utils/validators.dart';
+import 'package:etmaen/features/auth/presentation/blocs/sign_up/sign_up_bloc.dart';
+import 'package:etmaen/features/auth/presentation/models/otp_page_args.dart';
+import 'package:etmaen/features/auth/presentation/widget/auth_text_field.dart';
+import 'package:etmaen/shared/widget/auth_header.dart';
 import 'package:etmaen/shared/widget/custom_button.dart';
-import 'package:etmaen/shared/widget/custom_checkbox.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_modular/flutter_modular.dart'
+    hide ModularWatchExtension;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -24,48 +26,50 @@ class CreateAccountScreen extends StatefulWidget {
 
 class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final _formKey = GlobalKey<FormState>();
-  late TextEditingController _nameController;
-  late TextEditingController _emailController;
-  late TextEditingController _phoneController;
-  late TextEditingController _genderController;
-  late TextEditingController _ageController;
-  late TextEditingController _passwordController;
-  late TextEditingController _confirmPasswordController;
-  bool _rememberMe = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _nameController = TextEditingController();
-    _emailController = TextEditingController();
-    _phoneController = TextEditingController();
-    _genderController = TextEditingController();
-    _ageController = TextEditingController();
-    _passwordController = TextEditingController();
-    _confirmPasswordController = TextEditingController();
-  }
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
   @override
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
-    _genderController.dispose();
-    _ageController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
   }
 
+  void _submit() {
+    if (_formKey.currentState!.validate()) {
+      context.read<SignUpBloc>().add(SignUpSubmitted(
+            name: _nameController.text,
+            email: _emailController.text,
+            whatsappNumber: _phoneController.text,
+            password: _passwordController.text,
+            passwordConfirmation: _confirmPasswordController.text,
+          ));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool isopen = MediaQuery.of(context).viewInsets.bottom == 0.0;
-    return BlocConsumer<SignUpCubit, SignUpState>(
+    final showHeader = MediaQuery.of(context).viewInsets.bottom == 0.0;
+    return BlocConsumer<SignUpBloc, SignUpState>(
       listener: (context, state) {
         if (state is SignUpFailure) {
-          AlertService.showError(context, message: state.error);
+          AlertService.showError(context, message: state.message);
         } else if (state is SignUpSuccess) {
-          AlertService.showSuccess(context, message: 'تم انشاء الحساب بنجاح');
+          AlertService.showSuccess(context, message: state.message);
+          Modular.to.pushNamed(
+            AppRouteName.enterOtp,
+            arguments: OtpPageArgs(
+              whatsappNumber: state.whatsappNumber,
+              purpose: OtpPurpose.register,
+            ),
+          );
         }
       },
       builder: (context, state) {
@@ -81,7 +85,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      if (isopen) ...[
+                      if (showHeader) ...[
                         const AuthHeader(
                           title: AppStrings.createAccount,
                           subtitle: AppStrings.createAccountDescription,
@@ -93,34 +97,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                         hintText: AppStrings.fullNameHint,
                         icon: Iconsax.user,
                         controller: _nameController,
-                        validator: (value) => Validators.validateRequired(value,
-                            fieldName: AppStrings.fullName),
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: AuthTextField(
-                              label: AppStrings.gender,
-                              hintText: AppStrings.genderHint,
-                              controller: _genderController,
-                              validator: (value) => Validators.validateRequired(
-                                  value,
-                                  fieldName: AppStrings.gender),
-                            ),
-                          ),
-                          const SizedBox(width: AppSizes.lgPadding),
-                          Expanded(
-                            child: AuthTextField(
-                              label: AppStrings.age,
-                              hintText: '',
-                              icon: Iconsax.calendar,
-                              controller: _ageController,
-                              validator: (value) => Validators.validateRequired(
-                                  value,
-                                  fieldName: AppStrings.age),
-                            ),
-                          ),
-                        ],
+                        validator: Validators.validateName,
                       ),
                       AuthTextField(
                         label: AppStrings.phone,
@@ -128,12 +105,11 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                         icon: Iconsax.call,
                         controller: _phoneController,
                         keyboardType: TextInputType.phone,
-                        validator: (value) => Validators.validateRequired(value,
-                            fieldName: AppStrings.phone),
+                        validator: Validators.validatePhoneNumber,
                       ),
                       AuthTextField(
                         label: AppStrings.yourEmail,
-                        hintText: AppStrings.yourEmail,
+                        hintText: AppStrings.emailHint,
                         icon: Iconsax.sms,
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
@@ -141,16 +117,15 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       ),
                       AuthTextField(
                         label: AppStrings.password,
-                        hintText: '●●●●●●●●',
+                        hintText: AppStrings.passwordHint8,
                         icon: Iconsax.lock,
                         obscureText: true,
                         controller: _passwordController,
-                        validator: (value) => Validators.validateRequired(value,
-                            fieldName: AppStrings.password),
+                        validator: Validators.validatePassword,
                       ),
                       AuthTextField(
                         label: AppStrings.confirmPasswordLabels,
-                        hintText: '●●●●●●●●',
+                        hintText: AppStrings.rewritePassword_hint,
                         icon: Iconsax.lock,
                         obscureText: true,
                         controller: _confirmPasswordController,
@@ -158,42 +133,31 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                             Validators.validateConfirmPassword(
                                 value, _passwordController.text),
                       ),
-                      Row(
-                        children: [
-                          CustomCheckbox(
-                            value: _rememberMe,
-                            onChanged: (value) {
-                              setState(() {
-                                _rememberMe = value ?? false;
-                              });
-                            },
-                          ),
-                          Text(
-                            AppStrings.rememberMe,
-                            style: AppFonts.tajawalMedium14.copyWith(
-                              color: AppColors.greyAA,
-                            ),
-                          ),
-                        ],
-                      ),
                       SizedBox(height: 16.h),
                       CustomButton(
                         text: AppStrings.createAccountBtn,
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            context.read<SignUpCubit>().signUp(
-                                  name: _nameController.text,
-                                  email: _emailController.text,
-                                  phone: _phoneController.text,
-                                  password: _passwordController.text,
-                                  confirmPassword:
-                                      _confirmPasswordController.text,
-                                );
-                          }
-                        },
+                        onPressed: _submit,
                         color: AppColors.primary,
                         textColor: Colors.white,
                         isLoading: state is SignUpLoading,
+                      ),
+                      SizedBox(height: 8.h),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(AppStrings.Have,
+                              style: AppFonts.tajawalMedium14
+                                  .copyWith(color: AppColors.textBlack)),
+                          TextButton(
+                            onPressed: () =>
+                                Modular.to.navigate(AppRouteName.signIn),
+                            child: Text(
+                              AppStrings.signInNow,
+                              style: AppFonts.tajawalBold16
+                                  .copyWith(color: AppColors.primary),
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(height: 16.h),
                     ],

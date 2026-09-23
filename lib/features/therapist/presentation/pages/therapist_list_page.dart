@@ -1,12 +1,13 @@
 import 'package:etmaen/core/constants/app_colors.dart';
+import 'package:etmaen/core/constants/app_pages_name.dart';
 import 'package:etmaen/core/constants/app_fonts.dart';
 import 'package:etmaen/core/constants/app_sizes.dart';
 import 'package:etmaen/core/constants/app_strings.dart';
-import 'package:etmaen/features/therapist/presentation/blocs/therapist_list/therapist_list_cubit.dart';
+import 'package:etmaen/features/therapist/presentation/blocs/therapist_list/therapist_list_bloc.dart';
 import 'package:etmaen/features/therapist/presentation/widgets/therapist_lis_doctor_card.dart';
-import 'package:etmaen/shared/services/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AvailableOptionsPage extends StatelessWidget {
@@ -14,7 +15,6 @@ class AvailableOptionsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = sl<TherapistListCubit>();
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
@@ -34,7 +34,7 @@ class AvailableOptionsPage extends StatelessWidget {
               ),
               _buildSearchBar(),
               Expanded(
-                child: BlocBuilder<TherapistListCubit, TherapistListState>(
+                child: BlocBuilder<TherapistListBloc, TherapistListState>(
                   builder: (context, state) {
                     switch (state) {
                       case TherapistListError():
@@ -55,14 +55,17 @@ class AvailableOptionsPage extends StatelessWidget {
                               ),
                               child: TherapistLisDoctorCard(
                                 onAppointment: () {
-                                  cubit.navigateToBookingPage(
-                                    state.therapists[index],
+                                  Modular.to.pushNamed(
+                                    AppRouteName.bookingPage,
+                                    arguments: state.therapists[index],
                                   );
                                 },
                                 doctorModel: state.therapists[index],
                                 onViwe: () {
-                                  cubit.getTherapistById(
-                                      state.therapists[index].id);
+                                  Modular.to.pushNamed(
+                                    AppRouteName.doctorProfileDetails,
+                                    arguments: state.therapists[index].id,
+                                  );
                                 },
                               ),
                             );

@@ -1,3 +1,4 @@
+import 'package:etmaen/core/constants/app_pages_name.dart';
 import 'package:etmaen/core/constants/app_sizes.dart';
 import 'package:etmaen/core/constants/app_colors.dart';
 import 'package:etmaen/core/constants/app_fonts.dart';
@@ -5,36 +6,37 @@ import 'package:etmaen/core/constants/app_strings.dart';
 import 'package:etmaen/features/therapist/data/models/therapist_availability_model.dart';
 import 'package:etmaen/features/therapist/data/models/therapist_model.dart';
 import 'package:etmaen/features/therapist/data/models/therapist_review_model.dart';
-import 'package:etmaen/features/therapist/presentation/blocs/therapist_detail/therapist_detail_cubit.dart';
+import 'package:etmaen/features/therapist/presentation/blocs/therapist_detail/therapist_detail_bloc.dart';
 import 'package:etmaen/features/therapist/presentation/widgets/doctor_appointments_card.dart';
 import 'package:etmaen/features/therapist/presentation/widgets/doctor_detail_card.dart';
 import 'package:etmaen/features/therapist/presentation/widgets/doctor_hedar.dart';
 import 'package:etmaen/features/therapist/presentation/widgets/doctor_info_card.dart';
 import 'package:etmaen/features/therapist/presentation/widgets/doctor_review_item.dart';
-import 'package:etmaen/shared/services/service_locator.dart';
 import 'package:etmaen/shared/widget/custom_button.dart';
 import 'package:etmaen/shared/widget/custom_floatingAction_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_modular/flutter_modular.dart'
+    hide ModularWatchExtension;
 
 class DoctorProfileDetailsPage extends StatelessWidget {
   const DoctorProfileDetailsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    TherapistDetailCubit cubit = sl<TherapistDetailCubit>();
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: customFloatingActionButton(
         onPressed: () {
-          final state = context.read<TherapistDetailCubit>().state;
+          final state = context.read<TherapistDetailBloc>().state;
           if (state is TherapistDetailLoaded) {
-            cubit.navigateToBookingPage(state.therapist);
+            Modular.to.pushNamed(AppRouteName.bookingPage,
+                arguments: state.therapist);
           }
         },
         text: AppStrings.bookFirstSession,
       ),
-      body: BlocBuilder<TherapistDetailCubit, TherapistDetailState>(
+      body: BlocBuilder<TherapistDetailBloc, TherapistDetailState>(
         builder: (context, state) {
           switch (state) {
             case TherapistDetailError():
@@ -110,6 +112,7 @@ Widget _buildLodedState({
 }
 
 Widget _errorState(String message, BuildContext context) {
+  final therapistId = Modular.args.data;
   return Padding(
     padding: const EdgeInsets.all(AppSizes.lgPadding),
     child: Column(
@@ -117,11 +120,13 @@ Widget _errorState(String message, BuildContext context) {
       children: [
         Text(message),
         CustomButton(
-          text: 'اعد المحاوله مره اخرى',
+          text: AppStrings.retry,
           onPressed: () {
-            // ReadContext(context)
-            //     .read<TherapistDetailCubit>()
-            //     .getTherapistDetail();
+            if (therapistId is String) {
+              context
+                  .read<TherapistDetailBloc>()
+                  .add(TherapistDetailRequested(therapistId));
+            }
           },
           color: AppColors.primary,
           textColor: AppColors.white,

@@ -50,7 +50,7 @@ class EndVideoPage extends StatelessWidget {
               SizedBox(height: 24.h),
               SizedBox(
                 width: double.infinity,
-                  child: CustomButton(
+                child: CustomButton(
                   text: AppStrings.playVideo,
                   onPressed: () {
                     Modular.to.pushReplacementNamed(AppRouteName.welcome);

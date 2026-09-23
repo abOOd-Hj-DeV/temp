@@ -3,6 +3,7 @@ import 'package:etmaen/core/constants/app_fonts.dart';
 import 'package:etmaen/core/constants/app_pages_name.dart';
 import 'package:etmaen/core/constants/app_sizes.dart';
 import 'package:etmaen/core/constants/app_strings.dart';
+import 'package:etmaen/features/assessment/data/models/assessment_type.dart';
 import 'package:etmaen/shared/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -48,7 +49,7 @@ class AssessmentIntroScreen extends StatelessWidget {
       height: 160.w,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: AppColors.primary.withOpacity(0.15),
+        color: AppColors.primary.withValues(alpha: 0.15),
       ),
       child: Center(
         child: Container(
@@ -100,7 +101,7 @@ class AssessmentIntroScreen extends StatelessWidget {
         vertical: 12.h,
       ),
       decoration: BoxDecoration(
-        color: AppColors.primary.withOpacity(0.1),
+        color: AppColors.primary.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(AppSizes.xlRadius),
       ),
       child: Text(
@@ -114,17 +115,31 @@ class AssessmentIntroScreen extends StatelessWidget {
   }
 
   Widget _buildStartButton() {
-    return SizedBox(
-      width: double.infinity,
-      child: CustomButton(
-        text: AppStrings.startAssessment,
-        onPressed: () {
-          Modular.to
-              .pushReplacementNamed(AppRouteName.assessmentQuestionScreen);
-        },
-        color: AppColors.primary,
-        textColor: AppColors.white,
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (final type in AssessmentType.values) ...[
+          CustomButton(
+            text: '${AppStrings.startAssessment}: ${type.title}',
+            onPressed: () => Modular.to.pushNamed(
+              AppRouteName.assessmentQuestionScreen,
+              arguments: type,
+            ),
+            color: type == AssessmentType.phq9
+                ? AppColors.primary
+                : AppColors.white,
+            textColor: type == AssessmentType.phq9
+                ? AppColors.white
+                : AppColors.primary,
+            borderColor: AppColors.primary,
+          ),
+          SizedBox(height: 12.h),
+        ],
+        TextButton(
+          onPressed: () => Modular.to.navigate(AppRouteName.home),
+          child: const Text(AppStrings.skipForNow),
+        ),
+      ],
     );
   }
 }

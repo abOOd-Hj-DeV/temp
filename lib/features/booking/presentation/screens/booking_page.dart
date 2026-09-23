@@ -1,7 +1,7 @@
+import 'package:etmaen/core/constants/app_pages_name.dart';
 import 'package:etmaen/core/constants/app_strings.dart';
 import 'package:etmaen/core/utils/alert_dialog_helper.dart';
-import 'package:etmaen/features/booking/presentation/block/booking_cubit.dart';
-import 'package:etmaen/features/booking/presentation/block/booking_state.dart';
+import 'package:etmaen/features/booking/presentation/blocs/booking_bloc.dart';
 import 'package:etmaen/features/booking/presentation/widgets/booking_confirmation.dart';
 import 'package:etmaen/features/booking/presentation/widgets/booking_date.dart';
 import 'package:etmaen/features/booking/presentation/widgets/booking_hedar.dart';
@@ -11,6 +11,8 @@ import 'package:etmaen/features/booking/presentation/widgets/booking_time.dart';
 import 'package:etmaen/shared/widget/custom_floatingAction_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_modular/flutter_modular.dart'
+    hide ModularWatchExtension;
 import 'package:step_progress/step_progress.dart';
 
 class BookingPage extends StatefulWidget {
@@ -58,10 +60,14 @@ class _BookingPageState extends State<BookingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<BookingCubit, BookingState>(
+    return BlocConsumer<BookingBloc, BookingState>(
       listener: (context, state) {
         if (state.status == BookingStatus.success) {
           AlertService.showSuccess(context, message: AppStrings.bookingSuccess);
+          Modular.to.navigate(AppRouteName.home);
+        } else if (state.status == BookingStatus.failure &&
+            state.error != null) {
+          AlertService.showError(context, message: state.error!);
         }
         _updateStepProgress(state, _stepProgressController);
       },
@@ -72,7 +78,7 @@ class _BookingPageState extends State<BookingPage> {
                 isLoading: state.status == BookingStatus.loading,
                 text: AppStrings.bookConsultationSession,
                 onPressed: () {
-                  context.read<BookingCubit>().submitBooking();
+                  context.read<BookingBloc>().add(const BookingSubmitted());
                 },
               )
             : null,

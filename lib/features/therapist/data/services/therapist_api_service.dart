@@ -1,6 +1,7 @@
 import 'package:etmaen/core/api/api_consumer.dart';
 
-/// PocketBase therapists koleksiyonu API servisi
+/// لا يوفر الباك‑إند حالياً endpoint للمعالجين؛ هذه بيانات محلية مؤقتة
+/// تُستبدل باستدعاء [api] عند توفر `GET /therapists`.
 class TherapistApiService {
   final ApiConsumer api;
 
@@ -12,18 +13,18 @@ class TherapistApiService {
       "items": [
         {
           "id": "therapist1",
-          "full_name": "Dr. Ayşe Demir",
-          "title": "Klinik Psikolog",
-          "specialty": "Bilişsel Davranışçı Terapi",
+          "full_name": "د. سارة أحمد",
+          "title": "أخصائية نفسية إكلينيكية",
+          "specialty": "العلاج المعرفي السلوكي",
           "review_count": 45,
           "rating": 4.8,
           "years_of_experience": 8,
-          "country": "Türkiye",
-          "city": "İstanbul",
-          "district": "Kadıköy",
-          "languages": ["Türkçe", "İngilizce"],
+          "country": "السعودية",
+          "city": "الرياض",
+          "district": "العليا",
+          "languages": ["العربية", "الإنجليزية"],
           "gender": "female",
-          "bio": "Anksiyete ve depresyon konusunda 8 yıllık deneyim.",
+          "bio": "خبرة 8 سنوات في علاج القلق والاكتئاب.",
           "avatar": "",
           "is_available": true,
           "is_emergency": false,
@@ -32,18 +33,18 @@ class TherapistApiService {
         },
         {
           "id": "therapist2",
-          "full_name": "Dr. Mehmet Kaya",
-          "title": "Psikiyatrist",
-          "specialty": "Bipolar Bozukluk",
+          "full_name": "د. محمد الخالد",
+          "title": "طبيب نفسي",
+          "specialty": "الاضطراب ثنائي القطب",
           "review_count": 32,
           "rating": 4.6,
           "years_of_experience": 12,
-          "country": "Türkiye",
-          "city": "Ankara",
-          "district": "Çankaya",
-          "languages": ["Türkçe"],
+          "country": "السعودية",
+          "city": "جدة",
+          "district": "الروضة",
+          "languages": ["العربية"],
           "gender": "male",
-          "bio": "Yetişkin ve ergen psikiyatrisi uzmanı.",
+          "bio": "مختص في الطب النفسي للبالغين والمراهقين.",
           "avatar": "",
           "is_available": true,
           "is_emergency": true,
@@ -64,7 +65,7 @@ class TherapistApiService {
         {
           "id": "avail1",
           "therapist": id,
-          "day_of_week": "Pazartesi",
+          "day_of_week": "الاثنين",
           "start_time": "09:00",
           "end_time": "17:00",
           "is_available": true,
@@ -79,18 +80,18 @@ class TherapistApiService {
     await Future.delayed(const Duration(milliseconds: 300));
     return {
       "id": id,
-      "full_name": "Dr. Ayşe Demir",
-      "title": "Klinik Psikolog",
-      "specialty": "Bilişsel Davranışçı Terapi",
+      "full_name": "د. سارة أحمد",
+      "title": "أخصائية نفسية إكلينيكية",
+      "specialty": "العلاج المعرفي السلوكي",
       "review_count": 45,
       "rating": 4.8,
       "years_of_experience": 8,
-      "country": "Türkiye",
-      "city": "İstanbul",
-      "district": "Kadıköy",
-      "languages": ["Türkçe", "İngilizce"],
+      "country": "السعودية",
+      "city": "الرياض",
+      "district": "العليا",
+      "languages": ["العربية", "الإنجليزية"],
       "gender": "female",
-      "bio": "Anksiyete ve depresyon konusunda 8 yıllık deneyim.",
+      "bio": "خبرة 8 سنوات في علاج القلق والاكتئاب.",
       "avatar": "",
       "is_available": true,
       "is_emergency": false,
@@ -108,7 +109,7 @@ class TherapistApiService {
           "therapist": id,
           "user": "user2",
           "rating": 5,
-          "comment": "Çok profesyonel ve anlayışlı.",
+          "comment": "محترفة ومتفهمة جداً.",
           "created": "2024-01-02 00:00:00",
           "updated": "2024-01-02 00:00:00",
         }

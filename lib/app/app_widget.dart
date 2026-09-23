@@ -1,4 +1,7 @@
+import 'package:etmaen/features/auth/presentation/blocs/session/session_bloc.dart';
+import 'package:etmaen/shared/services/service_locator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,39 +13,41 @@ class AppWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(375, 812), // من تصميم Figma
-      minTextAdapt: true,
-      splitScreenMode: true,
-      builder: (_, child) {
-        return MaterialApp.router(
-          checkerboardOffscreenLayers: false,
-          debugShowMaterialGrid: false,
-          checkerboardRasterCacheImages: false,
-          showPerformanceOverlay: false,
-          showSemanticsDebugger: false,
-          useInheritedMediaQuery: false,
-          
+    return BlocProvider.value(
+      value: sl<SessionBloc>(),
+      child: ScreenUtilInit(
+        designSize: const Size(375, 812), // من تصميم Figma
+        minTextAdapt: true,
+        splitScreenMode: true,
+        builder: (_, child) {
+          return MaterialApp.router(
+            checkerboardOffscreenLayers: false,
+            debugShowMaterialGrid: false,
+            checkerboardRasterCacheImages: false,
+            showPerformanceOverlay: false,
+            showSemanticsDebugger: false,
+            useInheritedMediaQuery: false,
 
-          title: AppStrings.appName,
-          debugShowCheckedModeBanner: false,
-          locale: const Locale('ar'),
-          supportedLocales: const [
-            Locale('ar'),
-          ],
-          localizationsDelegates: const [
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          // هنا ربطنا الثيم
-          theme: AppTheme.light,
-          themeMode: ThemeMode.system,
+            title: AppStrings.appName,
+            debugShowCheckedModeBanner: false,
+            locale: const Locale('ar'),
+            supportedLocales: const [
+              Locale('ar'),
+            ],
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            // هنا ربطنا الثيم
+            theme: AppTheme.light,
+            themeMode: ThemeMode.system,
 
-          routerDelegate: Modular.routerDelegate,
-          routeInformationParser: Modular.routeInformationParser,
-        );
-      },
+            routerDelegate: Modular.routerDelegate,
+            routeInformationParser: Modular.routeInformationParser,
+          );
+        },
+      ),
     );
   }
 }

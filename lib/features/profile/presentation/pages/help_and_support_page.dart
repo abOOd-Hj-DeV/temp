@@ -32,7 +32,7 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage> {
             Modular.to.pop();
           },
         ),
-        title: Text(
+        title: const Text(
           AppStrings.helpAndSupportTitle,
         ),
       ),
@@ -48,7 +48,7 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage> {
                 CustomTabBar(
                   margin: EdgeInsets.zero,
                   selectedIndex: _selectedTabIndex,
-                  tabs: [
+                  tabs: const [
                     AppStrings.myRequestsTab,
                     AppStrings.newRequestTab,
                   ],

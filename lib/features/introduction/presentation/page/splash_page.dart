@@ -1,6 +1,11 @@
+import 'dart:async';
+
 import 'package:etmaen/core/constants/app_assets.dart';
 import 'package:etmaen/core/constants/app_colors.dart';
 import 'package:etmaen/core/constants/app_pages_name.dart';
+import 'package:etmaen/features/auth/presentation/blocs/session/session_bloc.dart';
+import 'package:etmaen/shared/services/service_locator.dart';
+import 'package:etmaen/shared/services/shared_pref_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,15 +41,41 @@ class _SplashPageState extends State<SplashPage>
 
     _controller.forward();
 
-    Future.delayed(const Duration(seconds: 3), () {
-      if (mounted) {
-        Modular.to.pushReplacementNamed(AppRouteName.onboarding);
-      }
+    sl<SessionBloc>().add(const SessionChecked());
+    _sessionSub = sl<SessionBloc>().stream.listen(_onSession);
+    _timer = Timer(const Duration(milliseconds: 1800), () {
+      _animationDone = true;
+      _onSession(sl<SessionBloc>().state);
     });
+  }
+
+  StreamSubscription<SessionState>? _sessionSub;
+  Timer? _timer;
+  bool _animationDone = false;
+  bool _navigated = false;
+
+  Future<void> _onSession(SessionState state) async {
+    if (!mounted || _navigated || !_animationDone) return;
+    switch (state) {
+      case SessionAuthenticated():
+        _navigated = true;
+        Modular.to.navigate(AppRouteName.home);
+      case SessionUnauthenticated():
+        _navigated = true;
+        final seen =
+            await SharedPrefHelper.getBool(SharedPrefHelper.onboardingSeenKey);
+        if (!mounted) return;
+        Modular.to
+            .navigate(seen ? AppRouteName.welcome : AppRouteName.onboarding);
+      default:
+        break;
+    }
   }
 
   @override
   void dispose() {
+    _sessionSub?.cancel();
+    _timer?.cancel();
     _controller.dispose();
     super.dispose();
   }

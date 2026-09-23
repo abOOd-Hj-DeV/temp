@@ -1,62 +1,64 @@
 import 'package:etmaen/core/constants/app_colors.dart';
 import 'package:etmaen/core/constants/app_fonts.dart';
 import 'package:etmaen/core/constants/app_strings.dart';
+import 'package:etmaen/features/patient/data/models/progress_model.dart';
 import 'package:etmaen/shared/widget/card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class WeeklyStats extends StatelessWidget {
-  const WeeklyStats({super.key});
+  final ProgressModel? progress;
+
+  const WeeklyStats({super.key, this.progress});
 
   @override
   Widget build(BuildContext context) {
+    final recent = progress?.recentScores ?? const [];
+    final first = recent.isNotEmpty ? recent.first.score : null;
+    final last = recent.isNotEmpty ? recent.last.score : null;
     return CustomCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            AppStrings.weeklyStats,
-            style: AppFonts.tajawalBold16,
-          ),
+          Text(AppStrings.progressTitle, style: AppFonts.tajawalBold16),
           SizedBox(height: 15.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const WeeklyStatsItem(
-                value: '18/30',
-                label: AppStrings.daysRegistered,
+              WeeklyStatsItem(
+                value: '${progress?.assessmentCount ?? 0}',
+                label: AppStrings.assessmentsCount,
                 isCompleted: true,
               ),
-              Container(
-                width: 8.w,
-                height: 8.h,
-                decoration: const BoxDecoration(
-                  color: AppColors.primary,
-                  shape: BoxShape.circle,
-                ),
+              _dot(),
+              WeeklyStatsItem(
+                value: progress?.currentScore?.toString() ?? '-',
+                label: AppStrings.currentScore,
+                isCompleted: false,
               ),
-              const WeeklyStatsItem(
-                  value: '12/19',
-                  label: AppStrings.exercisesCompleted,
-                  isCompleted: false),
-              Container(
-                width: 8.w,
-                height: 8.h,
-                decoration: const BoxDecoration(
-                  color: AppColors.primary,
-                  shape: BoxShape.circle,
-                ),
+              _dot(),
+              WeeklyStatsItem(
+                value: (first != null && last != null)
+                    ? '${last - first >= 0 ? '+' : ''}${last - first}'
+                    : '-',
+                label: AppStrings.scoreChange,
+                isCompleted: false,
               ),
-              const WeeklyStatsItem(
-                  value: '20/20',
-                  label: AppStrings.exercisesDone,
-                  isCompleted: false),
             ],
           ),
         ],
       ),
     );
   }
+
+  Widget _dot() => Container(
+        width: 8.w,
+        height: 8.h,
+        decoration: const BoxDecoration(
+          color: AppColors.primary,
+          shape: BoxShape.circle,
+        ),
+      );
 }
 
 class WeeklyStatsItem extends StatelessWidget {

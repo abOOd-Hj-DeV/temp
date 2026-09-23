@@ -23,6 +23,7 @@ class AppColors {
   static const Color grayE6 = Color(0xFFE6E6EA); // HEX: #E6E6EA
   static const Color yellow = Color(0xFFF0B100); // HEX: #F0B100
   static const Color red = Color(0xFFFD4438); //HEX: #FD4438
+  static const Color error = red;
   static const Color minRed = Color(0xFFFBEFEF); //HEX: #FBEFEF
   static const Color black10 = Color(0xFF101828); //HEX: #101828
   static const Color minOrgin = Color(0xFFFFEDD4); //HEX: #FFEDD4

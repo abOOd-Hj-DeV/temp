@@ -1,35 +1,44 @@
-import 'package:equatable/equatable.dart';
+part of 'otp_bloc.dart';
 
-/// الفئة الأساسية لحالات التحقق من OTP
-abstract class VerifyOtpState extends Equatable {
-  const VerifyOtpState();
+sealed class OtpState extends Equatable {
+  const OtpState();
 
   @override
   List<Object?> get props => [];
 }
 
-/// الحالة الابتدائية
-class VerifyOtpInitial extends VerifyOtpState {}
+final class OtpInitial extends OtpState {
+  const OtpInitial();
+}
 
-/// حالة التحميل (جاري التحقق من الرمز)
-class VerifyOtpLoading extends VerifyOtpState {}
+final class OtpVerifying extends OtpState {
+  const OtpVerifying();
+}
 
-/// حالة النجاح (رمز التحقق صحيح)
-class VerifyOtpSuccess extends VerifyOtpState {
+final class OtpResending extends OtpState {
+  const OtpResending();
+}
+
+final class OtpVerified extends OtpState {
+  final AuthSessionModel session;
+  const OtpVerified(this.session);
+
+  @override
+  List<Object?> get props => [session];
+}
+
+final class OtpResent extends OtpState {
   final String message;
-
-  const VerifyOtpSuccess({required this.message});
+  const OtpResent(this.message);
 
   @override
   List<Object?> get props => [message];
 }
 
-/// حالة الفشل (رمز التحقق خاطئ أو حدث خطأ)
-class VerifyOtpFailure extends VerifyOtpState {
-  final String error;
-
-  const VerifyOtpFailure({required this.error});
+final class OtpFailure extends OtpState {
+  final String message;
+  const OtpFailure(this.message);
 
   @override
-  List<Object?> get props => [error];
+  List<Object?> get props => [message];
 }

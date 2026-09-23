@@ -2,6 +2,7 @@ import 'package:etmaen/core/constants/app_pages_name.dart';
 import 'package:etmaen/features/introduction/data/local/onboarding_data_list.dart';
 import 'package:etmaen/features/introduction/presentation/widget/onboarding_info_card.dart';
 import 'package:etmaen/features/introduction/presentation/widget/onboarding_slider.dart';
+import 'package:etmaen/shared/services/shared_pref_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -42,7 +43,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
   }
 
   void _navigate() {
-    Modular.to.pushReplacementNamed(AppRouteName.welcome);
+    SharedPrefHelper.setBool(SharedPrefHelper.onboardingSeenKey, true);
+    Modular.to.navigate(AppRouteName.welcome);
   }
 
   @override

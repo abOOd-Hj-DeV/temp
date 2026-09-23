@@ -1,13 +1,22 @@
+import 'package:etmaen/core/constants/app_pages_name.dart';
 import 'package:etmaen/core/constants/app_sizes.dart';
 import 'package:etmaen/core/constants/app_colors.dart';
 import 'package:etmaen/core/constants/app_fonts.dart';
 import 'package:etmaen/core/constants/app_strings.dart';
 import 'package:etmaen/shared/widget/card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class InformCards extends StatelessWidget {
   const InformCards({super.key});
+
+  static const _actions = [
+    _Action(AppRouteName.assessmentIntroScreen, AppStrings.startAssessment,
+        AppStrings.assessmentCardSubtitle, Icons.assignment_outlined),
+    _Action(AppRouteName.programs, AppStrings.programs,
+        AppStrings.programsCardSubtitle, Icons.menu_book_outlined),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -16,21 +25,19 @@ class InformCards extends StatelessWidget {
           horizontal: AppSizes.lgPadding, vertical: AppSizes.lgPadding),
       child: Row(
         children: [
-          Expanded(
-            child: InformCardItem(
-              title: AppStrings.messaging,
-              subtitle: AppStrings.responseTimeSubtitle,
-              icon: Icons.calendar_today_outlined,
+          for (final (i, a) in _actions.indexed) ...[
+            if (i > 0) const SizedBox(width: AppSizes.lgPadding),
+            Expanded(
+              child: GestureDetector(
+                onTap: () => Modular.to.pushNamed(a.route),
+                child: InformCardItem(
+                  title: a.title,
+                  subtitle: a.subtitle,
+                  icon: a.icon,
+                ),
+              ),
             ),
-          ),
-          const SizedBox(width: AppSizes.lgPadding),
-          Expanded(
-            child: InformCardItem(
-              title: AppStrings.messaging,
-              subtitle: AppStrings.responseTimeSubtitle,
-              icon: Icons.calendar_today_outlined,
-            ),
-          ),
+          ],
         ],
       ),
     );
@@ -82,4 +89,12 @@ class InformCardItem extends StatelessWidget {
       ),
     );
   }
+}
+
+class _Action {
+  final String route;
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  const _Action(this.route, this.title, this.subtitle, this.icon);
 }

@@ -1,64 +1,42 @@
-/// PocketBase users koleksiyonu modeli
-class UserModel {
-  final String id;
-  final String email;
-  final String? name;
-  final String? phone;
-  final int? age;
-  final String? gender;
-  final String? dateOfBirth;
-  final String? avatar;
-  final bool emailVisibility;
-  final bool verified;
-  final String created;
-  final String updated;
+import 'package:equatable/equatable.dart';
+import 'package:etmaen/features/patient/data/models/patient_profile_model.dart';
 
-  UserModel({
+/// المستخدم كما يعيده Laravel (`users` + علاقة `patient`)
+class UserModel extends Equatable {
+  final String id;
+  final String name;
+  final String email;
+  final String whatsappNumber;
+  final bool isActive;
+  final bool isVerified;
+  final PatientProfileModel? patient;
+
+  const UserModel({
     required this.id,
+    required this.name,
     required this.email,
-    this.name,
-    this.phone,
-    this.age,
-    this.gender,
-    this.dateOfBirth,
-    this.avatar,
-    this.emailVisibility = false,
-    this.verified = false,
-    required this.created,
-    required this.updated,
+    required this.whatsappNumber,
+    required this.isActive,
+    required this.isVerified,
+    this.patient,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
+    final patientJson = json['patient'];
     return UserModel(
-      id: json['id'] ?? '',
-      email: json['email'] ?? '',
-      name: json['name'],
-      phone: json['phone'],
-      age: json['age'],
-      gender: json['gender'],
-      dateOfBirth: json['date_of_birth'],
-      avatar: json['avatar'],
-      emailVisibility: json['emailVisibility'] ?? false,
-      verified: json['verified'] ?? false,
-      created: json['created'] ?? '',
-      updated: json['updated'] ?? '',
+      id: json['id']?.toString() ?? '',
+      name: json['name']?.toString() ?? '',
+      email: json['email']?.toString() ?? '',
+      whatsappNumber: json['whatsapp_number']?.toString() ?? '',
+      isActive: json['is_active'] == true || json['is_active'] == 1,
+      isVerified: json['phone_verified_at'] != null,
+      patient: patientJson is Map<String, dynamic>
+          ? PatientProfileModel.fromJson(patientJson)
+          : null,
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'email': email,
-      'name': name,
-      'phone': phone,
-      'age': age,
-      'gender': gender,
-      'date_of_birth': dateOfBirth,
-      'avatar': avatar,
-      'emailVisibility': emailVisibility,
-      'verified': verified,
-      'created': created,
-      'updated': updated,
-    };
-  }
+  @override
+  List<Object?> get props =>
+      [id, name, email, whatsappNumber, isActive, isVerified, patient];
 }

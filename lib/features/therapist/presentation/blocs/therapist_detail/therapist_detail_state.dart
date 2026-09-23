@@ -1,4 +1,4 @@
-part of 'therapist_detail_cubit.dart';
+part of 'therapist_detail_bloc.dart';
 
 sealed class TherapistDetailState extends Equatable {
   const TherapistDetailState();

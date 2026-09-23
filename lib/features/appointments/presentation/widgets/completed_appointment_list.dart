@@ -1,33 +1,23 @@
-import 'package:etmaen/core/constants/app_strings.dart';
-import 'package:etmaen/features/appointments/data/models/appointment_time.dart';
-import 'package:flutter/material.dart';
 import 'package:etmaen/core/constants/app_sizes.dart';
+import 'package:etmaen/features/appointments/presentation/models/appointment_card_model.dart';
 import 'package:etmaen/features/appointments/presentation/widgets/completed_appointment_card.dart';
+import 'package:etmaen/features/patient/data/models/session_model.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CompletedAppointmentList extends StatelessWidget {
-  const CompletedAppointmentList({
-    super.key,
-  });
+  final List<SessionModel> sessions;
+
+  const CompletedAppointmentList({super.key, required this.sessions});
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       padding: EdgeInsets.only(bottom: AppSizes.xlPadding.h),
-      itemCount: 1,
+      itemCount: sessions.length,
       itemBuilder: (context, index) {
         return CompletedAppointmentCard(
-          model: AppointmentCardModel(
-            note: AppStrings.appointmentNoteReminder,
-            responseTime: AppStrings.appointmentResponseTime,
-            sessionNumber: 1,
-            dateLabel: AppStrings.appointmentDateLabel,
-            startTimeLabel: AppStrings.appointmentTimeLabel,
-            durationMinutes: 50,
-            communicationType: "chat",
-            platform: "whatsapp",
-          ),
-          onViewReport: () {},
+          model: AppointmentCardModel.fromSession(sessions[index], index),
         );
       },
     );
