@@ -1,66 +1,241 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<div dir="rtl">
+
+# اتّمِن | Etmaen
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="assets/images/logo.png" alt="اتّمِن Logo" width="150"/>
 </p>
 
-## About Laravel
+<p align="center">
+  <strong>تطبيق لرعاية الصحة النفسية والعلاج الرقمي</strong><br/>
+  رحلتك العلاجية في عالم الصحة النفسية تبدأ من هنا
+</p>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+<p align="center">
+  <a href="#-المميزات">المميزات</a> •
+  <a href="#-البنية التقنية">البنية التقنية</a> •
+  <a href="#-هيكل المشروع">هيكل المشروع</a> •
+  <a href="#-البدء">البدء</a> •
+  <a href="#-الهيكلية المعمارية">الهيكلية المعمارية</a>
+</p>
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 📱 نبذة عن المشروع
 
-## Learning Laravel
+**اتّمِن** هو تطبيق موبايل مبني بإطار عمل Flutter مخصص لرعاية الصحة النفسية وتقديم خدمات العلاج الرقمي. يوفر التطبيق وصلة بين المرضى والمعالجين المرخصين من خلال جلسات علاجية عبر الفيديو، مع دعم كامل للغة العربية واتجاه RTL.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## ✨ المميزات
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### للمستخدمين
+- 🔐 **نظام مصادقة متكامل** — تسجيل دخول، إنشاء حساب، استعادة كلمة المرور عبر OTP
+- 📋 **تقييم أولي ذكي** — مقياس PHQ-9 للاكتئاب لفهم الحالة النفسية
+- 👨‍⚕️ **اختيار المعالج** — تصفية حسب التخصص، اللغة، الجنس، الدولة
+- 📅 **حجز الجلسات** — اختيار التاريخ والوقت وطريقة التواصل (Google Meet)
+- 💬 **دردشة مباشرة** — تواصل مع معالجك بين الجلسات
+- 📊 **إحصائيات أسبوعية** — تتبع التقدم والتمارين المنجزة
+- 🔔 **إشعارات ذكية** — تذكيرات قبل المواعيد
+- 👤 **إدارة الملف الشخصي** — تعديل البيانات الشخصية وإعدادات الحساب
+- 🆘 **الدعم والمساعدة** — نظام تذاكر دعم فني
 
-## Laravel Sponsors
+### لفريق التطوير
+- 🏗️ ** Clean Architecture ** — فصل واضح بين الطبقات
+- 🧩 **Modular Routing** — إدارة متقدمة للمسارات عبر flutter_modular
+- 📦 **State Management** — إدارة حالة باستخدام BLoC/Cubit
+- 🔌 **Dependency Injection** — حقن التبعيات عبر GetIt
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## 🛠️ البنية التقنية
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+| الفئة | التقنية |
+|---|---|
+| **الإطار** | Flutter (Dart SDK ^3.5.1) |
+| **إدارة الحالة** | flutter_bloc ^9.1.1 |
+| **المسارات** | flutter_modular ^6.3.4 |
+| **حقن التبعيات** | get_it ^9.2.0 |
+| **عميل HTTP** | dio ^5.9.0 |
+| **التخزين المحلي** | hive, shared_preferences, flutter_secure_storage |
+| **التصميم** | flutter_screenutil, google_fonts, iconsax |
+| **المكونات** | pinput (OTP), step_progress, confetti, dotted_border |
+| **التكامل** | flutter_svg, flutter_native_splash |
+| **قواعد البيانات** | PocketBase (REST API) |
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 📁 هيكل المشروع
 
-## Code of Conduct
+```
+lib/
+├── main.dart                          # نقطة الدخول
+├── app/
+│   ├── app_module.dart                # تعريف المسارات (Modular)
+│   └── app_widget.dart                # MaterialApp.router
+├── core/
+│   ├── api/                           # استهلاك API عبر Dio
+│   ├── constants/                     # الألوان، الخطوط، الأحجام، النصوص، المسارات
+│   ├── error/                         # الاستثناءات والأخطاء
+│   ├── network/                       # فحص الاتصال بالإنترنت
+│   ├── theme/                         # الثيم ونمط النصوص
+│   └── utils/                         # الأدوات المساعدة والانتقالات
+├── features/
+│   ├── introduction/                  # البداية والتوجيه
+│   │   └── presentation/page/         # Splash, Onboarding, Welcome, Video
+│   ├── auth/                          # المصادقة
+│   │   ├── data/                      # النماذج، الخدمات،المستودعات
+│   │   └── presentation/              # الصفحات، BLoCs, الـ Widgets
+│   ├── assessment/                    # التقييم النفسي الأولي
+│   ├── home/                          # الصفحة الرئيسية
+│   ├── therapist/                     # الملف الشخصي للمعالج
+│   ├── booking/                       # حجز الجلسات
+│   ├── chat/                          # الدردشة
+│   ├── appointments/                  # المواعيد
+│   ├── payment/ & payments/           # المدفوعات
+│   ├── profile/                       # الملف الشخصي
+│   ├── programs/                      # البرامج العلاجية
+│   ├── notifications/                 # الإشعارات
+│   ├── emergency/                     # الطوارئ
+│   └── faq/                           # الأسئلة الشائعة
+└── shared/
+    ├── services/                      # service_locator.dart
+    └── widget/                        # مكونات مشتركة (CorePage, BottomNavBar...)
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 🚀 البدء
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### المتطلبات
+- Flutter SDK ^3.5.1
+- Dart SDK ^3.5.1
+- Android Studio / VS Code
+- Emulator أو جهاز فيزيائي
 
-## License
+### التثبيت
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+# 1. استنساخ المستودع
+git clone https://github.com/username/heal_bridge-frontend.git
+
+# 2. الانتقال إلى مجلد المشروع
+cd heal_bridge-frontend
+
+# 3. تثبيت التبعيات
+flutter pub get
+
+# 4. تشغيل التطبيق
+flutter run
+```
+
+### بناء التطبيق
+
+```bash
+# بناء APK (Android)
+flutter build apk --release
+
+# بناء IPA (iOS)
+flutter build ios --release
+```
+
+---
+
+## 🏛️ الهيكلية المعمارية
+
+يُبنى المشروع وفق نمط **Clean Architecture** مع فصل واضح بين ثلاث طبقات:
+
+```
+┌─────────────────────────────────────────┐
+│           Presentation Layer            │
+│  (Pages, Widgets, BLoCs / Cubits)       │
+├─────────────────────────────────────────┤
+│             Domain Layer                │
+│  (Entities, Use Cases)                  │
+├─────────────────────────────────────────┤
+│              Data Layer                 │
+│  (Models, Repositories, DataSources,    │
+│   API Services)                         │
+└─────────────────────────────────────────┘
+```
+
+### تدفق البيانات
+
+```
+UI (Page/Widget)
+    ↓ Event
+BLoC / Cubit
+    ↓ Method Call
+Repository
+    ↓ API Call
+ApiService (Dio)
+    ↓ HTTP Request
+PocketBase Server
+```
+
+---
+
+## 📸 لقطات الشاشة
+
+<div align="center">
+
+| البداية | التسجيل | الصفحة الرئيسية |
+|:---:|:---:|:---:|
+| ![Splash](screenshots/splash.png) | ![Auth](screenshots/auth.png) | ![Home](screenshots/home.png) |
+
+| اختيار المعالج | حجز جلسة | الملف الشخصي |
+|:---:|:---:|:---:|
+| ![Therapist](screenshots/therapist.png) | ![Booking](screenshots/booking.png) | ![Profile](screenshots/profile.png) |
+
+</div>
+
+---
+
+## 🗺️ خريطة المسارات
+
+```
+/ (Splash)
+├── /onboarding → /start_video → /assessment_intro_screen
+│                                → /assessment_question_screen
+│                                → /available_options
+│                                → /doctor_profile_details
+│                                → /booking_page
+├── /welcome
+│   ├── /sign_in → /home
+│   │   └── /forgot_password → /enter_otp → /home
+│   └── /create_account → /enter_otp → /home
+└── /home (CorePage)
+    ├── Tab: الرئيسية
+    ├── Tab: مواعيدي
+    ├── Tab: مدفوعات
+    └── Tab: الحساب
+        ├── /edit_personal_info
+        └── /help_and_support
+```
+
+---
+
+## 🤝 المساهمة
+
+نرحب بالمساهمات! للاطلاع على الطريقة:
+
+1. форك المستودع
+2. إنشاء فرع جديد (`git checkout -b feature/`)
+3. القيام بالتغييرات المطلوبة
+4. الإيداع (`git commit -m 'Add feature'`)
+5. الدفع (`git push origin feature/`)
+6. فتح Pull Request
+
+---
+
+## 📄 الترخيص
+
+هذا المشروع خاص ولا يمكن نشره. جميع الحقوق محفوظة لـ © 2025 سكينة.
+
+---
+
+## 📧 التواصل
+
+للاستفسارات والدعم الفني، يرجى فتح issue على [GitHub](https://github.com/username/heal_bridge-frontend/issues).
+
+</div>
