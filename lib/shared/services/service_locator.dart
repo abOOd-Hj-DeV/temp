@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:etmaen/core/api/api_consumer.dart';
+import 'package:etmaen/core/api/demo_api_consumer.dart';
 import 'package:etmaen/core/api/dio_consumer.dart';
 import 'package:etmaen/core/network/network_info.dart';
 import 'package:etmaen/core/storage/token_storage.dart';
@@ -43,11 +44,12 @@ Future<void> initDependencies() async {
 
   //! Core
   sl.registerLazySingleton<TokenStorage>(() => TokenStorage(sl()));
-  sl.registerLazySingleton<NetworkInfo>(() => kIsWeb
+  sl.registerLazySingleton<NetworkInfo>(() => kIsWeb || DemoApiConsumer.enabled
       ? const AlwaysOnlineNetworkInfo()
       : NetworkInfoImpl(InternetConnectionChecker.createInstance()));
-  sl.registerLazySingleton<ApiConsumer>(
-      () => DioConsumer(dio: sl(), tokenStorage: sl()));
+  sl.registerLazySingleton<ApiConsumer>(() => DemoApiConsumer.enabled
+      ? DemoApiConsumer()
+      : DioConsumer(dio: sl(), tokenStorage: sl()));
 
   //! Auth
   sl.registerLazySingleton<AuthApiService>(() => AuthApiService(sl()));

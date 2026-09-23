@@ -122,7 +122,28 @@ flutter pub get
 
 # عنوان الباك‑إند (Laravel) يُمرَّر وقت البناء — الافتراضي http://127.0.0.1:8000/api/v1/
 flutter run --dart-define=API_BASE_URL=https://api.example.com/api/v1/
+
+# Android emulator مع Laravel محلي: http://10.0.2.2:8000/api/v1/
 ```
+
+### وضع العرض (بدون سيرفر)
+
+للتنقّل بين الشاشات وتجريب الواجهات دون تشغيل Laravel:
+
+```bash
+flutter run --dart-define=DEMO_MODE=true
+```
+
+يستبدل `DioConsumer` بـ `DemoApiConsumer` (`lib/core/api/demo_api_consumer.dart`) الذي يعيد
+استجابات محلية بنفس شكل استجابات `temp2`؛ كل ما فوقه (Services / Repositories / Blocs / UI) يعمل كما هو.
+
+- تسجيل الدخول: أي رقم واتساب + أي كلمة سر غير فارغة.
+- إنشاء حساب / نسيت كلمة السر: أي رمز OTP من 6 أرقام.
+- الرئيسية والمواعيد والبرامج والتقدّم والملف الشخصي: بيانات عربية ثابتة.
+- التقييم (PHQ‑9 / GAD‑7): يُحسب المجموع ويُضاف إلى السجل خلال الجلسة.
+- المعالجون والحجز محليان أصلاً (لا endpoint لهما في `temp2`).
+
+بدون `DEMO_MODE=true` يعمل التطبيق بالوضع الحقيقي ضد `API_BASE_URL`.
 
 ### الفحص والبناء
 
