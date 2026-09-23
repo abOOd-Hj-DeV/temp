@@ -1,10 +1,16 @@
+import 'package:etmaen/core/constants/app_colors.dart';
 import 'package:etmaen/core/constants/app_sizes.dart';
 import 'package:etmaen/core/constants/app_strings.dart';
 import 'package:etmaen/features/profile/presentation/widgets/faq_tile.dart';
-import 'package:etmaen/shared/widget/custom_app_bar.dart';
+import 'package:etmaen/features/profile/presentation/widgets/support_request_title.dart';
+import 'package:etmaen/shared/widget/card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:iconsax/iconsax.dart';
 
-/// الأسئلة الشائعة — محتوى ثابت محلياً (لا يوجد endpoint في الباك‑إند)
+/// الأسئلة الشائعة — نفس كتلة «الأسئلة الشائعة» في شاشة الدعم بتصميم Figma
+/// المحتوى ثابت محلياً (لا يوجد endpoint في الباك‑إند)
 class FaqPage extends StatelessWidget {
   const FaqPage({super.key});
 
@@ -34,12 +40,36 @@ class FaqPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: AppStrings.faq),
+      backgroundColor: AppColors.background,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, color: AppColors.white),
+          onPressed: () => Modular.to.pop(),
+        ),
+        title: const Text(AppStrings.faq),
+      ),
       body: ListView(
-        padding: const EdgeInsets.all(AppSizes.lgPadding),
+        padding: EdgeInsets.fromLTRB(
+            AppSizes.lgPadding.w, 20.h, AppSizes.lgPadding.w, 24.h),
         children: [
-          for (final (i, item) in _items.indexed)
-            FAQTile(question: item.$1, answer: item.$2, isExpanded: i == 0),
+          const SupportRequestTitle(
+            icon: Iconsax.info_circle,
+            title: AppStrings.commonQuestions,
+          ),
+          CustomCard(
+            margin: EdgeInsets.zero,
+            child: Column(
+              children: [
+                for (final (i, item) in _items.indexed)
+                  FAQTile(
+                    question: item.$1,
+                    answer: item.$2,
+                    isExpanded: i == 1,
+                  ),
+              ],
+            ),
+          ),
         ],
       ),
     );

@@ -10,6 +10,7 @@ import 'package:etmaen/features/auth/presentation/models/otp_page_args.dart';
 import 'package:etmaen/features/auth/presentation/widget/auth_text_field.dart';
 import 'package:etmaen/shared/widget/custom_app_bar.dart';
 import 'package:etmaen/shared/widget/custom_button.dart';
+import 'package:etmaen/shared/widget/success_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart'
@@ -45,8 +46,13 @@ class _CreateNewPasswordPageState extends State<CreateNewPasswordPage> {
         if (state is ResetPasswordFailure) {
           AlertService.showError(context, message: state.message);
         } else if (state is ResetPasswordSuccess) {
-          AlertService.showSuccess(context, message: state.message);
-          Modular.to.navigate(AppRouteName.signIn);
+          SuccessDialog.show(
+            context,
+            title: AppStrings.passwordChangedTitle,
+            description: AppStrings.passwordChangedDescription,
+            actionLabel: AppStrings.signInNow,
+            onAction: () => Modular.to.navigate(AppRouteName.signIn),
+          );
         }
       },
       builder: (context, state) {

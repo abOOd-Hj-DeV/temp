@@ -6,7 +6,7 @@ class AssessmentQuestionBank {
   AssessmentQuestionBank._();
 
   static const String intro =
-      'خلال الأسبوعين الماضيين، كم مرة أزعجتك المشكلات التالية؟';
+      'خلال الأسبوعين الماضيين، كم مرة عانيت من:';
 
   /// الخيارات الأربعة تُرسل كقيم 0..3
   static const List<String> options = [

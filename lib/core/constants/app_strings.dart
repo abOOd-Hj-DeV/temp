@@ -300,6 +300,37 @@ class AppStrings {
   static const String back = 'رجوع';
   static const String browseTherapists = 'تصفح المعالجين';
   static const String choosePackage = 'اختر باقتك';
+  static const String choosePackageSubtitle = 'ابدأ رحلتك نحو حياة أفضل';
+  static const String mostPopular = 'الأكثر شيوعاً';
+  static const String savePrefix = 'وفر';
+  static const String paymentMethod = 'طريقة الدفع';
+  static const String bankTransfer = 'تحويل بنكي';
+  static const String bankLabel = 'البنك';
+  static const String bankName = 'البنك الأهلي السعودي';
+  static const String accountNumberLabel = 'رقم الحساب';
+  static const String accountNumber = 'SA0000000000000000';
+  static const String amountLabel = 'المبلغ';
+  static const String uploadReceipt = 'تحميل إيصال التحويل';
+  static const String uploadReceiptHint = 'اضغط لتحميل صورة الإيصال';
+  static const String receiptReceivedTitle = 'مبروووك !';
+  static const String receiptReceivedDescription =
+      'تم استلام طلب اشتراكك، سيتواصل معك فريق سكينة لتأكيد التحويل وتفعيل الباقة.';
+  static const String initialSessionDone = 'تم إتمام جلستك الأولية بنجاح';
+  static const String therapistSummary = 'ملخص المعالج';
+  static const String initialAssessmentLabel = 'التقييم الأولي:';
+  static const String suggestedProgram = 'البرنامج العلاجي المقترح';
+  static const String messageTherapist = 'راسل';
+  static const String thinkLater = 'سأفكر في الأمر لاحقاً';
+  static const String emergencyIntro =
+      'شكراً لثقتك بنا. بناءً على إجاباتك، سيتم تحويلك إلى مشرف إكلينيكي متخصص للحصول على الدعم العاجل.';
+  static const String emergencyLocalNotice =
+      'في حالة الطوارئ الفورية، يرجى الاتصال بخدمات الطوارئ المحلية.';
+  static const String mentalHealthHotline = 'خط الطوارئ النفسية';
+  static const String whatsappSupport = 'دعم فوري عبر الواتساب';
+  static const String talkToClinician = 'التحدث مع مشرف إكلينيكي الآن';
+  static const String passwordChangedTitle = 'مبروووك !';
+  static const String passwordChangedDescription =
+      'تم تغيير كلمة المرور ! تأكد من حفظها و عدم نسيانها مرة أخرى.';
   static const String completeProfileDescription =
       'نحتاج بعض المعلومات الأساسية لتخصيص رحلتك العلاجية';
   static const String completeProfileTitle = 'أكمل ملفك الشخصي';

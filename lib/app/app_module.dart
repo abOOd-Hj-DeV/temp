@@ -28,9 +28,7 @@ import 'package:etmaen/features/introduction/presentation/page/start_video.dart'
 import 'package:etmaen/features/introduction/presentation/page/welcome_page.dart';
 import 'package:etmaen/features/legal/presentation/pages/legal_page.dart';
 import 'package:etmaen/features/patient/presentation/pages/complete_profile_page.dart';
-import 'package:etmaen/features/payment/presentation/models/package_model.dart';
 import 'package:etmaen/features/payment/presentation/pages/packages_page.dart';
-import 'package:etmaen/features/payment/presentation/pages/payment_summary_page.dart';
 import 'package:etmaen/features/payment/presentation/pages/thank_you_page.dart';
 import 'package:etmaen/features/profile/presentation/pages/help_and_support_page.dart';
 import 'package:etmaen/features/profile/presentation/pages/personal_info_page.dart';
@@ -216,15 +214,10 @@ class AppModule extends Module {
         child: (_) => const PackagesPage(),
         transition: TransitionType.custom,
         customTransition: AppTransitions.slideRight);
-    r.child(AppRouteName.paymentSummary,
-        child: (_) => _withArgs<PackageModel>(
-              (package) => PaymentSummaryPage(package: package),
-            ),
-        transition: TransitionType.custom,
-        customTransition: AppTransitions.slideRight);
     r.child(AppRouteName.thankYou, child: (_) {
       final data = Modular.args.data;
-      return ThankYouPage(package: data is PackageModel ? data : null);
+      return ThankYouPage(
+          args: data is ThankYouArgs ? data : ThankYouArgs.sample);
     },
         transition: TransitionType.custom,
         customTransition: AppTransitions.scale);

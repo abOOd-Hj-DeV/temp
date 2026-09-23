@@ -21,9 +21,7 @@ class AnswerOption extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
-        margin: EdgeInsets.symmetric(
-          vertical: 8.h,
-        ),
+        margin: EdgeInsets.only(bottom: 12.h),
         duration: const Duration(milliseconds: 200),
         width: double.infinity,
         padding: EdgeInsets.symmetric(
@@ -31,19 +29,18 @@ class AnswerOption extends StatelessWidget {
           vertical: 16.h,
         ),
         decoration: BoxDecoration(
-          color: isSelected
-              ? AppColors.primary.withValues(alpha: 0.08)
-              : AppColors.white,
+          color: isSelected ? AppColors.primary : AppColors.white,
           borderRadius: BorderRadius.circular(AppSizes.mdRadius),
           border: Border.all(
-            color: isSelected ? AppColors.primary : const Color(0xFFE5E7EB),
-            width: 1.6,
+            color: isSelected ? AppColors.primary : AppColors.grayE6,
+            width: 1.2,
           ),
         ),
         child: Text(
           text,
-          style: AppFonts.tajawalRegular16.copyWith(
-            color: AppColors.black0A,
+          textAlign: TextAlign.center,
+          style: AppFonts.tajawalMedium16.copyWith(
+            color: isSelected ? AppColors.white : AppColors.textBlackF1,
           ),
         ),
       ),
